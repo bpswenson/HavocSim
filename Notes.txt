@@ -1,0 +1,14 @@
+Note:  Project is for giggles only
+
+Repos of interest
+
+https://github.com/Microsoft/MPI.NET (work with core?)
+	Apparently not "Support for MPI.NET on Unix platforms is provided based on the Mono C# compiler and its toolchain. The .NET landscape on Linux is fast changing, both with mono increasingly using open source .NET code from Microsoft and the emergence of .NET Core."
+	- Find core compatable solution or make one
+
+https://ieeexplore.ieee.org/abstract/document/1443308
+https://www.cs.utexas.edu/~browne/cs380ns2003/Papers/p30-fujimoto.pdf
+
+
+	
+
