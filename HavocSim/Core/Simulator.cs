@@ -8,50 +8,46 @@ namespace HavocSim.Core
 {
     public class Simulator
     {
-        private static SimulatorImpl instance = null;
+        private static ISimulatorImpl? _instance;
 
-        public static void SetImplementation(SimulatorImpl impl)
+        public static void SetImplementation(ISimulatorImpl impl)
         {
-            instance = impl;
+            _instance = impl;
         }
-        public static SimulatorImpl GetImplementation() {
-            return instance;
-        }
-        public static void SetScheduler(Scheduler scheduler)
-        {
-
-        }
-        public static void Destroy()
-        {
-
+        public static ISimulatorImpl? GetImplementation() {
+            return _instance;
         }
         public static bool IsFinished()
         {
-            return false;
+            return _instance?.IsFinished() ?? true;
         }
         public static void Run()
         {
-
+            if(_instance is null)
+            {
+                throw new InvalidOperationException("Attempting to run simulation without setting simulationImplementation");
+            }
+            _instance.Run();
         }
         public static void Stop()
         {
-
+            _instance?.Stop();
         }
-        public static void Stop(Time delay)
+        public static void Stop(uint delay)
         {
-
+            _instance?.Stop(delay);
         }
         public static uint GetEventCount()
         {
-            return 0;
+            return _instance?.GetEventCount() ?? 0;
         }
-        public static Time Now()
+        public static uint Now()
         {
-            return new Time();
+            return _instance?.Now() ?? 0;
         }
         public static uint GetSystemId()
         {
-            return 0;
+            return _instance?.GetSystemId() ?? 0;
         }
     }
 }

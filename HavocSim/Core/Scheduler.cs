@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace HavocSim.Core
 {
-    public abstract class Scheduler
+    public interface IScheduler
     {
-        public abstract void Insert(Event ev);
-        public abstract bool IsEmpty();
-        public abstract Event PeekNext();
-        public abstract Event RemoveNext();
-        public abstract void Remove(Event ev);
+        public void Insert(Event ev);
+        public bool IsEmpty();
+        public Event PeekNext();
+        public Event RemoveNext();
+        public void Remove(Event ev);
     }
 }
