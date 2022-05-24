@@ -49,5 +49,13 @@ namespace HavocSim.Core
         {
             return _instance?.GetSystemId() ?? 0;
         }
+
+        public static Event? Schedule(uint delay, IEventImpl ev)
+        {
+            if (_instance == null)
+                throw new InvalidOperationException("Unable to schedule events on a null simulation instance");
+
+            return _instance.Schedule(delay, ev);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace HavocSim.Core
 {
     public class SortedSetScheduler : IScheduler
     {
-        SortedSetScheduler()
+        public SortedSetScheduler()
         {
             _events = new SortedSet<Event>();
         }

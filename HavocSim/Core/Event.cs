@@ -69,7 +69,7 @@ namespace HavocSim.Core
         }
     }
 
-    public class Event : IEquatable<Event>
+    public class Event : IEquatable<Event>, IComparable<Event>
     {
         public Event(IEventImpl impl, EventKey key)
         {
@@ -87,6 +87,7 @@ namespace HavocSim.Core
 
         public static bool operator==(Event lhs, Event rhs)
         {
+            if (lhs == null || rhs == null) return false;
             return lhs.Key == rhs.Key;
         }
         public static bool operator !=(Event lhs, Event rhs)
@@ -103,6 +104,11 @@ namespace HavocSim.Core
         public override bool Equals(object? obj)
         {
             return obj is Event && Equals((Event)obj);
+        }
+
+        public int CompareTo(Event? other)
+        {
+            return (Key > other.Key) ? 1 : (Key == other.Key) ? 0 : -1;
         }
     }
 }
