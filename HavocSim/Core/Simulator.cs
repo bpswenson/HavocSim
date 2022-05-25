@@ -86,7 +86,5 @@ namespace HavocSim.Core
 
             return _instance.Schedule(delay, ev, d1, d2, d3, d4);
         }
-
-
     }
 }
