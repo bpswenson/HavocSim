@@ -50,12 +50,43 @@ namespace HavocSim.Core
             return _instance?.GetSystemId() ?? 0;
         }
 
-        public static Event? Schedule(uint delay, IEventImpl ev)
+        public static Event Schedule(uint delay, Action ev)
         {
             if (_instance == null)
                 throw new InvalidOperationException("Unable to schedule events on a null simulation instance");
 
             return _instance.Schedule(delay, ev);
         }
+
+        public static Event Schedule<T1>(uint delay, Action<T1> ev, T1 d1)
+        {
+            if (_instance == null)
+                throw new InvalidOperationException("Unable to schedule events on a null simulation instance");
+
+            return _instance.Schedule(delay, ev, d1);
+        }
+        public static Event Schedule<T1, T2>(uint delay, Action<T1, T2> ev, T1 d1, T2 d2)
+        {
+            if (_instance == null)
+                throw new InvalidOperationException("Unable to schedule events on a null simulation instance");
+
+            return _instance.Schedule(delay, ev, d1, d2);
+        }
+        public static Event Schedule<T1, T2, T3>(uint delay, Action<T1, T2, T3> ev, T1 d1, T2 d2, T3 d3)
+        {
+            if (_instance == null)
+                throw new InvalidOperationException("Unable to schedule events on a null simulation instance");
+
+            return _instance.Schedule(delay, ev, d1, d2, d3);
+        }
+        public static  Event Schedule<T1, T2, T3, T4>(uint delay, Action<T1, T2, T3, T4> ev, T1 d1, T2 d2, T3 d3, T4 d4)
+        {
+            if (_instance == null)
+                throw new InvalidOperationException("Unable to schedule events on a null simulation instance");
+
+            return _instance.Schedule(delay, ev, d1, d2, d3, d4);
+        }
+
+
     }
 }

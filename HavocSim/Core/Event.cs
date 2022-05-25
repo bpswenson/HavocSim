@@ -6,109 +6,128 @@ using System.Threading.Tasks;
 
 namespace HavocSim.Core
 {
-    public struct EventKey : IEquatable<EventKey>
+    public abstract class Event : IEquatable<Event>, IComparable<Event>
     {
-        public uint TimeStamp { get; set; }
-        public uint Uid; 
-
-        public bool Equals(EventKey other)
+        public Event(uint uid, uint timestamp)
         {
-            return Uid == other.Uid;
+            Uid = uid;
+            TimeStamp = timestamp;
         }
-
-        public static bool operator!=(EventKey lhs, EventKey rhs)
-        {
-            return lhs.Uid != rhs.Uid;
-        }
-
-        public static bool operator==(EventKey lhs, EventKey rhs)
-        {
-            return lhs.Uid == rhs.Uid;
-        }
-
-        public static bool operator > (EventKey lhs, EventKey rhs)
-        {
-            if(lhs.TimeStamp > rhs.TimeStamp)
-            {
-                return true;
-            }
-            else if(lhs.TimeStamp == rhs.TimeStamp && lhs.Uid > rhs.Uid)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public static bool operator < (EventKey lhs, EventKey rhs)
-        {
-            if(lhs.TimeStamp < rhs.TimeStamp)
-            {
-                return true;
-            }
-            else if(lhs.TimeStamp == rhs.TimeStamp)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is EventKey && Equals((EventKey)obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Uid.GetHashCode();
-        }
-    }
-
-    public class Event : IEquatable<Event>, IComparable<Event>
-    {
-        public Event(IEventImpl impl, EventKey key)
-        {
-            Impl = impl;
-            Key = key; 
-        }
-
-        public IEventImpl Impl;
-        public EventKey Key;
+        public abstract void Invoke();
+        public void Cancel() { _active = false; }
 
         public bool Equals(Event? other)
         {
-            return Key == other?.Key;
-        }
-
-        public static bool operator==(Event lhs, Event rhs)
-        {
-            if (lhs == null || rhs == null) return false;
-            return lhs.Key == rhs.Key;
-        }
-        public static bool operator !=(Event lhs, Event rhs)
-        {
-            return lhs.Key != rhs.Key;
-        }
-
-
-        public override int GetHashCode()
-        {
-            return Key.GetHashCode();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is Event && Equals((Event)obj);
+            if (other == null) return false;
+            else if (TimeStamp == other.TimeStamp && Uid == other.Uid) return true;
+            else return false;
         }
 
         public int CompareTo(Event? other)
         {
-            return (Key > other.Key) ? 1 : (Key == other.Key) ? 0 : -1;
+            if (other == null) return 1;
+            else if (TimeStamp == other.TimeStamp && Uid == other.Uid) return 0;
+            else return TimeStamp.CompareTo(other.TimeStamp);
         }
+
+        public uint TimeStamp { get; }
+        public uint Uid { get; }
+
+        protected bool _active = true;
+    }
+    // not as spiffy as variadic generics with c++ but works
+
+    public class EventT : Event
+    {
+        public EventT(uint uid, uint timestamp, Action ev) : base(uid, timestamp)
+        {
+            _ev = ev;
+        }
+        public override void Invoke()
+        {
+            if (_active)
+            {
+                _ev();
+            }
+        }
+        private Action _ev;
+    }
+
+    public class EventT<T1> : Event
+    {
+        public EventT(uint uid, uint timestamp, Action<T1> ev, T1 d1) : base(uid, timestamp) {
+            _ev = ev;
+            _d1 = d1;
+        }
+        public override void Invoke() 
+        {
+            if (_active)
+            {
+                _ev(_d1);
+            }
+        }
+
+        private Action<T1> _ev;
+        private T1 _d1; 
+    }
+
+    public class EventT<T1, T2> : Event
+    {
+        public EventT(uint uid, uint timestamp, Action<T1, T2> ev, T1 d1, T2 d2) : base(uid, timestamp)
+        {
+            _ev = ev;
+            _d1 = d1;
+            _d2 = d2;
+        }
+        public override void Invoke()
+        {
+            if (_active) { _ev(_d1, _d2); }
+        }
+     
+        private Action<T1, T2> _ev;
+        private T1 _d1;
+        private T2 _d2;
+    }
+
+    public class EventT<T1, T2, T3> : Event
+    {
+        public EventT(uint uid, uint timestamp, Action<T1, T2, T3> ev, T1 d1, T2 d2, T3 d3) : base(uid, timestamp)
+        {
+            _ev = ev;
+            _d1 = d1;
+            _d2 = d2;
+            _d3 = d3;
+        }
+        public override void Invoke()
+        {
+            if(_active) { _ev(_d1, _d2, _d3); }
+        }
+
+        private Action<T1, T2, T3> _ev;
+        private T1 _d1;
+        private T2 _d2;
+        private T3 _d3;
+    }
+
+    public class EventT<T1, T2, T3, T4> : Event
+    {
+        public EventT(uint uid, uint timestamp, Action<T1, T2, T3, T4> ev, T1 d1, T2 d2, T3 d3, T4 d4) : base(uid, timestamp)
+        {
+            _ev = ev;
+            _d1 = d1;
+            _d2 = d2;
+            _d3 = d3;
+            _d4 = d4;
+        }
+        public override void Invoke()
+        {
+            if(_active) { _ev(_d1, _d2, _d3, _d4); }
+        }
+
+        private Action<T1, T2, T3, T4> _ev;
+        private T1 _d1;
+        private T2 _d2;
+        private T3 _d3;
+        private T4 _d4;
     }
 }
