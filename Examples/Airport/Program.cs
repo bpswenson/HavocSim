@@ -4,16 +4,27 @@ using HavocSim.Core;
 Simulator.SetImplementation(new SimpleSimulatorImpl(new SortedSetScheduler()));
 
 
-// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
-
 Airport atlanta = new Airport("Atlanta");
+Airport denver = new Airport("Denver");
 Airport milwaukee = new Airport("Milwaukee");
 
-Airplane testPlaneOne = new Airplane();
-Airplane testPlaneTwo = new Airplane();
+atlanta.AddRoute(milwaukee, 100);
+milwaukee.AddRoute(atlanta, 100);
+milwaukee.AddRoute(denver, 200);
+denver.AddRoute(milwaukee, 150);
 
-Simulator.Schedule(20, milwaukee.Arrival, testPlaneOne);
-Simulator.Schedule(30, atlanta.Arrival, testPlaneTwo);
+Airplane testPlaneOne = new Airplane("Delta 2778");
+testPlaneOne.PassengerCount = 50;
+Airplane testPlaneTwo = new Airplane("American Airlines 1421");
+testPlaneTwo.PassengerCount = 75;
+
+Simulator.Schedule(20, milwaukee.ArrivalEvent, testPlaneOne);
+Simulator.Schedule(30, atlanta.ArrivalEvent, testPlaneTwo);
+Simulator.Stop(5000);
 Simulator.Run();
+
+atlanta.PrintStats();
+denver.PrintStats();
+milwaukee.PrintStats();
+
 Console.WriteLine("Done");

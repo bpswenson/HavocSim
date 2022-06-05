@@ -8,7 +8,23 @@ namespace AirportSim
 {
     public class Airplane
     {
+        public Airplane(string name)
+        {
+            _name = name;
+        }
 
+    
+        public string Name
+        {
+            get { return _name; }
+        }
+
+        public uint PassengerCount
+        {
+            get; set;
+        }
+
+        private string _name;
 
     }
 }

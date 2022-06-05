@@ -25,20 +25,9 @@ namespace HavocSim.Core
         {
             _stop = true;
         }
-        public void Stop(uint delay) { 
+        public void Stop(uint delay) {
+            Simulator.Schedule(delay, this.Stop);
         }
-        /*
-        public Event Schedule(uint delay, IEventImpl ev)
-        {
-            EventKey key = new EventKey();
-            key.TimeStamp = _currentTime + delay;
-            key.Uid = _uid++;
-
-            Event ret = new Event(ev, key);
-            _scheduler.Insert(ret);
-            return ret;
-        }
-        */
         public void Remove(Event ev)
         {
             _scheduler.Remove(ev);
